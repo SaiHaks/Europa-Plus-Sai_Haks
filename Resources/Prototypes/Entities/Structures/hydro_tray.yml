@@ -188,6 +188,11 @@
     guides:
     - Botany
     - Chemicals
+# EuropaBotany-Start
+  - type: Construction
+    graph: UpgradeHydroponicsTray
+    node: start
+# EuropaBotany-End
 
 - type: entity
   parent: hydroponicsTray

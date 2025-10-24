@@ -42,7 +42,7 @@
     sprite: _EuropaBotany/Clothing/Head/Misc/sunflower_crown.rsi
     state: icon
   - type: Clothing
-    sprite: _EuropaBotanyClothing/Head/Misc/sunflower_crown.rsi
+    sprite: _EuropaBotany/Clothing/Head/Misc/sunflower_crown.rsi
     slots:
     - HEAD
   - type: Construction
