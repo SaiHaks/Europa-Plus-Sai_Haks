@@ -126,7 +126,7 @@
   id: plaststeelcap
   name: plaststeelcap
   noun: seeds-noun-spores
-  displayName: plaststeelcap
+  displayName: seeds-plaststeellog-display-name
   plantRsi: _EuropaBotany/Objects/Specific/Hydroponics/plaststeelcap.rsi
   packetPrototype: PlastSteelcapSeeds
   productPrototypes:
@@ -147,7 +147,7 @@
   id: glasscap
   name: glasscap
   noun: seeds-noun-spores
-  displayName: glasscap
+  displayName: seeds-glasslog-display-name
   plantRsi: _EuropaBotany/Objects/Specific/Hydroponics/glasscap.rsi
   packetPrototype: GlasscapSeeds
   productPrototypes:
@@ -168,7 +168,7 @@
   id: CannabisVita
   name: Cannabis Vita
   noun: seeds-noun-seeds
-  displayName: cannabis vita
+  displayName: seeds-сannabisvita-display-name
   plantRsi: _EuropaBotany/Objects/Specific/Hydroponics/cannabis_vita.rsi
   packetPrototype: CannabisVitaSeeds
   productPrototypes:
@@ -196,7 +196,7 @@
   id: Barrelmelon
   name: Barrelmelon
   noun: seeds-noun-seeds
-  displayName: Barrelmelon
+  displayName: seeds-barrelmelon-display-name
   plantRsi: _EuropaBotany/Objects/Specific/Hydroponics/barrelmelon.rsi
   packetPrototype: BarrelmelonSeeds
   productPrototypes:
@@ -221,7 +221,7 @@
   id: Lanternfruit
   name: Lantern fruit
   noun: seeds-noun-seeds
-  displayName: lantern fruit
+  displayName: seeds-lanternfruit-display-name
   plantRsi: _EuropaBotany/Objects/Specific/Hydroponics/lanternfruit.rsi
   packetPrototype: LanternfruitSeeds
   productPrototypes:
@@ -253,7 +253,7 @@
   id: Redrose
   name: red rose
   noun: seeds-noun-seeds
-  displayName: red rose
+  displayName: seeds-redrose-display-name
   plantRsi: _EuropaBotany/Objects/Specific/Hydroponics/redrose.rsi
   packetPrototype: RedroseSeeds
   productPrototypes:
@@ -281,7 +281,7 @@
   id: Whiterose
   name: White rose
   noun: seeds-noun-seeds
-  displayName: white rose
+  displayName: seeds-whiterose-display-name
   plantRsi: _EuropaBotany/Objects/Specific/Hydroponics/whiterose.rsi
   packetPrototype: WhiteroseSeeds
   productPrototypes:
@@ -311,7 +311,7 @@
   id: Sunflower
   name: Sunflower
   noun: seeds-noun-seeds
-  displayName: Sunflower
+  displayName: seeds-sunflower-display-name
   plantRsi: _EuropaBotany/Objects/Specific/Hydroponics/sunflower.rsi
   packetPrototype: SunflowerSeeds
   productPrototypes:
@@ -341,7 +341,7 @@
 
 - type: seed
   id: AmbrosiaGaia
-  name: seeds-ambrosiagaia-name
+  name: AmbrosiaGaia
   noun: seeds-noun-seeds
   displayName: seeds-ambrosiagaia-display-name
   plantRsi: _EuropaBotany/Objects/Specific/Hydroponics/ambrosia_gaia.rsi

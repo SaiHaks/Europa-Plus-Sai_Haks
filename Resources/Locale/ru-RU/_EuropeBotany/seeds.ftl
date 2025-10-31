@@ -22,3 +22,5 @@ ent-WhiteroseSeeds = пакет семян (белая роза)
     .desc = { ent-SeedBase.desc }
 ent-SunflowerSeeds = пакет семян (подсолнух)
     .desc = { ent-SeedBase.desc }
+ent-AmbrosiaGaiaSeeds = пакет семян (амброзия гайа)
+    .desc = { ent-SeedBase.desc }
