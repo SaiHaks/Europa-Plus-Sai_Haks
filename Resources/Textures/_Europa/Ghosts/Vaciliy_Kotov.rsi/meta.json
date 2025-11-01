@@ -1,14 +1,14 @@
 {
     "version": 1,
     "size": {
-        "x": 128,
-        "y": 160
+        "x": 320,
+        "y": 320
     },
     "license": "CC-BY-NC-4.0",
     "copyright": "Doner#4037 (Discord) author and vaciliy.kotov (Discord) owner",
     "states": [
         {
-            "name": "animated",
+            "name": "icon",
             "directions": 4,
             "delays": [
                 [
