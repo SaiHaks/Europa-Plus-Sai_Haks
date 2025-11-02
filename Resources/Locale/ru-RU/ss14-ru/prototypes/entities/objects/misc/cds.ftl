@@ -8,8 +8,11 @@ ent-CoordinatesDiskCentCommOld = старый диск координат ЦК
     .desc = Старый диск, хранящий уже давно неактуальные координаты. Стоит 5 кредитов.
 
 ent-SpawnerCoordinatesDiskCentComm = спавнер диск координат ЦК
+    .desc = спавнер диск координат ЦК
     .suffix = ТОЛЬКО ДЛЯ ЦК
+
 ent-SpawnerCoordinatesDiskCentCommOld = спавнер старый диск координат ЦК
+    .desc = спавнер старый диск координат ЦК
 
 cds-centcomm-expired-name = старый диск координат ЦК
 cds-centcomm-expired-description = Старый диск, хранящий уже давно неактуальные координаты. Стоит 5 кредитов.
