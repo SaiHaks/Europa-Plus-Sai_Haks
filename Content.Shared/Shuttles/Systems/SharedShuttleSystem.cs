@@ -83,6 +83,9 @@ public abstract partial class SharedShuttleSystem : EntitySystem
         if (!TryComp<FTLDestinationComponent>(mapUid, out var destination) || !destination.Enabled)
             return false;
 
+        if (_whitelistSystem.IsWhitelistPass(destination.Whitelist, shuttleUid))
+            return true;
+
         if (destination.RequireCoordinateDisk)
         {
             if (!TryComp<ItemSlotsComponent>(consoleUid, out var slot))

@@ -40,12 +40,8 @@ public sealed partial class StationCentCommSystem : EntitySystem
 
     private void OnCentCommInit(EntityUid uid, StationCentCommComponent component, ComponentInit args)
     {
-        // Post mapinit? fancy
-        if (TryComp<TransformComponent>(component.StationEntity, out var xform))
-        {
-            component.MapId = xform.MapID;
+        if (_map.MapExists(component.MapId))
             return;
-        }
 
         AddCentComm(component);
     }
