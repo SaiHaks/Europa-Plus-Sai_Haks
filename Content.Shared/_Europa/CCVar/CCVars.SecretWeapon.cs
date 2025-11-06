@@ -12,5 +12,5 @@ public sealed partial class CCVars
     /// Annihilate this chud. Now.
     /// </summary>
     public static readonly CVarDef<bool> ChatAnnihilationEnabled =
-        CVarDef.Create("chat.annihilator_enabled", true, CVar.SERVERONLY);
+        CVarDef.Create("chat.annihilator_enabled", true, CVar.SERVERONLY | CVar.ARCHIVE);
 }

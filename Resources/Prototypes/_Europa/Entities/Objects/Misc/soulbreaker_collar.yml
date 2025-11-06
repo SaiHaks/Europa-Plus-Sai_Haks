@@ -2,7 +2,7 @@
   name: soulbreaker collar
   description: Used by criminals and other villains for enslavement.
   id: SoulbreakerCollar
-  parent: [ ClothingNeckBase, BaseMajorContraband]
+  parent: [ BaseMajorContraband]
   components:
   - type: EmitSoundOnPickup
     sound:
@@ -10,6 +10,11 @@
       params:
         volume: -4
   - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_Goobstation/Items/other/Handcuffs/drop.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnLand
     sound:
       path: /Audio/_Goobstation/Items/other/Handcuffs/drop.ogg
       params:
@@ -28,6 +33,10 @@
         Blunt: 0
   - type: SelfUnremovableClothing
   - type: Clothing
+    quickEquip: false
+    slots:
+    - neck
+    - belt
     equipDelay: 1.5
     unequipDelay: 15
   - type: ClothingSpeedModifier
