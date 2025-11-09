@@ -9802,7 +9802,7 @@ entities:
     - type: Transform
       pos: 31.477634,-79.4623
       parent: 2
-- proto: ActionStethoscope
+- proto: Action
   entities:
   - uid: 9625
     mapInit: true
