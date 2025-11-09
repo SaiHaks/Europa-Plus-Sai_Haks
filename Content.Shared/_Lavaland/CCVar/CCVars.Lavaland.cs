@@ -30,8 +30,11 @@ public sealed partial class CCVars
     ///     Should the Lavaland roundstart generation be enabled.
     /// </summary>
     public static readonly CVarDef<bool> LavalandEnabled =
-        CVarDef.Create("lavaland.enabled", true, CVar.SERVERONLY);
+        CVarDef.Create("lavaland.enabled", true, CVar.SERVERONLY | CVar.REPLICATED | CVar.ARCHIVE);
 
     public static readonly CVarDef<bool> AllowDuplicatePkaModules =
         CVarDef.Create("modkit.dupes_enabled", true, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> LavalandEnabledOnline =
+            CVarDef.Create("lavaland.enabled_online", 40, CVar.SERVERONLY | CVar.ARCHIVE);
 }

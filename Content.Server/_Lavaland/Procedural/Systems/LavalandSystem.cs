@@ -31,6 +31,7 @@ using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Maps;
+using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
@@ -45,7 +46,7 @@ namespace Content.Server._Lavaland.Procedural.Systems;
 
 public sealed partial class LavalandSystem : EntitySystem
 {
-    public bool LavalandEnabled = false; // ЖИТЬ ЖИТЬ
+    public bool LavalandEnabled;
 
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -63,6 +64,7 @@ public sealed partial class LavalandSystem : EntitySystem
     [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly ShuttleSystem _shuttle = default!;
+    [Dependency] private readonly IPlayerManager _player = default!;
 
     private EntityQuery<MapGridComponent> _gridQuery;
     private EntityQuery<TransformComponent> _xformQuery;
@@ -85,6 +87,9 @@ public sealed partial class LavalandSystem : EntitySystem
 
     private void OnLoadingMaps(LoadingMapsEvent ev)
     {
+        if (_player.PlayerCount > _config.GetCVar(CCVars.LavalandEnabledOnline))
+            LavalandEnabled = false;
+
         EnsurePreloaderMap();
         foreach (var gameMap in ev.Maps)
         {
