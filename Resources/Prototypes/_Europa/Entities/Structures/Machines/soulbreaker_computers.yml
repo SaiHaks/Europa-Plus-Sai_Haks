@@ -1,0 +1,104 @@
+- type: entity
+  parent: BaseMachine
+  id: SoulbreakerShuttleConsole
+  name: soulbreaker shuttle console
+  description: Used to pilot a soulbreaker's shuttle.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _Europa/Structures/Machines/Soulbreakers/shuttle_console.rsi
+    state: icon
+  - type: Transform
+    anchored: true
+  - type: Anchorable
+    flags: Unanchorable
+  - type: ShuttleConsole
+  - type: ActivatableUI
+    key: enum.ShuttleConsoleUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.ShuttleConsoleUiKey.Key:
+        type: ShuttleConsoleBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: RadarConsole
+  - type: WorldLoader
+    radius: 256
+  - type: PointLight
+    radius: 1.5
+    energy: 1.6
+    color: "#e8e541"
+  - type: ItemSlots
+    slots:
+      disk_slot:
+        name: Disk
+        insertSound:
+          path: /Audio/Machines/terminal_insert_disc.ogg
+        ejectSound:
+          path: /Audio/Machines/terminal_insert_disc.ogg
+        whitelist:
+          components:
+          - ShuttleDestinationCoordinates
+  - type: ContainerContainer
+    containers:
+      board: !type:Container
+        ents: []
+      disk_slot: !type:ContainerSlot {}
+  - type: DeviceLinkSource
+    ports:
+    - SignalShuttleConsole1
+    - SignalShuttleConsole2
+    - SignalShuttleConsole3
+    - SignalShuttleConsole4
+    range: 90
+
+- type: entity
+  parent: [ BaseMachine ]
+  id: SoulbreakerAntenaTelecomServer
+  name: soulbreaker antena telecommunication server
+  description: It allows radio headset communication between soulbreakers.
+  components:
+  - type: Anchorable
+    flags: Unanchorable
+  - type: Sprite
+    sprite: _Europa/Structures/Machines/Soulbreakers/antena.rsi
+    noRot: true
+    state: icon
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 500
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: Transform
+    anchored: true
+  - type: EncryptionKeyHolder
+    keysExtractionMethod: Pulsing
+    keySlots: 1
+  - type: TelecomServer
+  - type: ContainerContainer
+    containers:
+      key_slots: !type:Container
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - EncryptionKeySoulbreaker

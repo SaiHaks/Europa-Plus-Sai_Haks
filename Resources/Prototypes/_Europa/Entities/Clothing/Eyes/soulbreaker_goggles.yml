@@ -1,0 +1,24 @@
+- type: entity
+  parent: [ClothingEyesBase,BaseMajorContraband]
+  id: SoulbreakerClothingEyesNightVisionGoggles
+  name: soulbreaker night vision goggles
+  description: A high-tech pair of night vision goggles. Has medical analysis technology.
+  components:
+  - type: Sprite
+    sprite: _Europa/Clothing/Eyes/soulbreaker_nvg.rsi
+  - type: Clothing
+    sprite: _Europa/Clothing/Eyes/soulbreaker_nvg.rsi
+  - type: NightVision
+    flashDurationMultiplier: 0
+    isEquipment: true
+    color: "#f5e082"
+  - type: ThermalVision
+    flashDurationMultiplier: 0
+    isEquipment: true
+    toggleAction: ToggleThermalVision
+    color: "#f5c382"
+  - type: IdentityBlocker
+    coverage: EYES
+  - type: ShowHealthBars
+    damageContainers:
+    - Biological

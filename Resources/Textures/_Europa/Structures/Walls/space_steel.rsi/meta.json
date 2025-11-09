@@ -1,0 +1,47 @@
+{
+    "version": 1,
+    "license": "Closed Party",
+    "copyright": "ILLUZORRxRandySandy - Do not use this in your repo/build. Thanks.",
+    "size": {
+      "x": 32,
+      "y": 32
+    },
+    "states": [
+      {
+        "name": "full"
+      },
+      {
+        "name": "space_steel0",
+        "directions": 4
+      },
+      {
+        "name": "space_steel1",
+        "directions": 4
+      },
+      {
+        "name": "space_steel2",
+        "directions": 4
+      },
+      {
+        "name": "space_steel3",
+        "directions": 4
+      },
+      {
+        "name": "space_steel4",
+        "directions": 4
+      },
+      {
+        "name": "space_steel5",
+        "directions": 4
+      },
+      {
+        "name": "space_steel6",
+        "directions": 4
+      },
+      {
+        "name": "space_steel7",
+        "directions": 4
+      }
+    ]
+  }
+  

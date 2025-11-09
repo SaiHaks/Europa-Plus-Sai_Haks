@@ -1,0 +1,9 @@
+- type: entity
+  id: SoulbreakerHandheldHealthAnalyzerUnpowered
+  parent: HandheldHealthAnalyzerUnpowered
+  name: soulbreaker health analyzer
+  suffix: Always Powered
+  description: A hand-held body scanner capable of distinguishing vital signs of the subject.
+  components:
+  - type: Sprite
+    sprite: _Europa/Objects/Specific/Medical/soulbreaker_health_analyzer.rsi

@@ -1,2 +1,2 @@
 chat-radio-inteq = Интек
-chat-radio-soulbreakers = Душегубы
+chat-radio-soulbreakers = Душеломы

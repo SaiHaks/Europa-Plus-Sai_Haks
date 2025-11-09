@@ -721,7 +721,9 @@ public sealed class AccessReaderSystem : EntitySystem
         items = new(_handsSystem.EnumerateHeld(uid));
 
         // maybe its inside an inventory slot?
-        if (_inventorySystem.TryGetSlotEntity(uid, "id", out var idUid))
+        if (_inventorySystem.TryGetSlotEntity(uid, "id", out var idUid) ||
+            _inventorySystem.TryGetSlotEntity(uid, "neck", out idUid) ||
+            _inventorySystem.TryGetSlotEntity(uid, "belt", out idUid))
         {
             items.Add(idUid.Value);
         }

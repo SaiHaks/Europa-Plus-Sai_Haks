@@ -178,7 +178,9 @@ public abstract class SharedIdCardSystem : EntitySystem
             return true;
 
         // check inventory slot?
-        if (_inventorySystem.TryGetSlotEntity(uid, "id", out var idUid) && TryGetIdCard(idUid.Value, out idCard))
+        if (_inventorySystem.TryGetSlotEntity(uid, "id", out var idUid) && TryGetIdCard(idUid.Value, out idCard) ||
+            _inventorySystem.TryGetSlotEntity(uid, "neck", out var idUid2) && TryGetIdCard(idUid2.Value, out idCard) ||
+            _inventorySystem.TryGetSlotEntity(uid, "belt", out var idUid3) && TryGetIdCard(idUid3.Value, out idCard))
             return true;
 
         return false;
@@ -350,6 +352,9 @@ public abstract class SharedIdCardSystem : EntitySystem
     private void UpdateEntityName(EntityUid uid, IdCardComponent? id = null)
     {
         if (!Resolve(uid, ref id))
+            return;
+
+        if (!id.UpdateName)
             return;
 
         var jobSuffix = string.IsNullOrWhiteSpace(id.LocalizedJobTitle) ? string.Empty : $" ({id.LocalizedJobTitle})";

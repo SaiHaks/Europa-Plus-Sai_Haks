@@ -128,7 +128,9 @@ public sealed class IdExaminableSystem : EntitySystem
 
     public string? GetInfo(EntityUid uid)
     {
-        if (_inventorySystem.TryGetSlotEntity(uid, "id", out var idUid))
+        if (_inventorySystem.TryGetSlotEntity(uid, "id", out var idUid) ||
+            _inventorySystem.TryGetSlotEntity(uid, "neck", out idUid) ||
+            _inventorySystem.TryGetSlotEntity(uid, "belt", out idUid))
         {
             // PDA
             if (TryComp(idUid, out PdaComponent? pda) &&

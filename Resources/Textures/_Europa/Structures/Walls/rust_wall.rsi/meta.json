@@ -1,0 +1,47 @@
+{
+    "version": 1,
+    "license": "Closed Party",
+    "copyright": "ILLUZORRxRandySandy - Do not use this in your repo/build. Thanks.",
+    "size": {
+      "x": 32,
+      "y": 32
+    },
+    "states": [
+      {
+        "name": "full"
+      },
+      {
+        "name": "rust_wall0",
+        "directions": 4
+      },
+      {
+        "name": "rust_wall1",
+        "directions": 4
+      },
+      {
+        "name": "rust_wall2",
+        "directions": 4
+      },
+      {
+        "name": "rust_wall3",
+        "directions": 4
+      },
+      {
+        "name": "rust_wall4",
+        "directions": 4
+      },
+      {
+        "name": "rust_wall5",
+        "directions": 4
+      },
+      {
+        "name": "rust_wall6",
+        "directions": 4
+      },
+      {
+        "name": "rust_wall7",
+        "directions": 4
+      }
+    ]
+  }
+  

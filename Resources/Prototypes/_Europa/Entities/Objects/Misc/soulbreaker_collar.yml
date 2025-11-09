@@ -37,7 +37,6 @@
     quickEquip: false
     slots:
     - neck
-    - belt
     equipDelay: 3
   - type: ClothingSpeedModifier
     walkModifier: 0.01
@@ -48,11 +47,6 @@
   - type: ClothingGrantComponent
     component:
     - type: Pacified
-    - type: Clumsy
-      clumsySound:
-        path: /Audio/Items/snap.ogg
-      gunShootFailDamage:
-        types:
-          Blunt: 0
-      clumsyDefaultCheck: 1
     - type: Muted
+    - type: BlockMovement
+      blockInteraction: true

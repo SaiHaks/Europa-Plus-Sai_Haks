@@ -1,0 +1,49 @@
+- type: entity
+  name: soulbreaker handcuffs
+  description: Used to chain slaves.
+  id: SoulbreakerHandcuffs
+  parent: [BaseItem, BaseMajorContraband]
+  components:
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_Goobstation/Items/other/Handcuffs/pickup.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/_Goobstation/Items/other/Handcuffs/drop.ogg
+      params:
+        volume: -4
+  - type: Item
+    size: Small
+    storedRotation: 90
+  - type: Handcuff
+    cuffTime: 1.5
+    uncuffTime: 15
+    breakoutTime: 9999
+    breakOnRemove: true
+    brokenPrototype: SoulbreakerHandcuffsBroken
+  - type: Sprite
+    sprite: _Europa/Objects/Specific/Security/soulbreaker_handcuffs.rsi
+    state: icon
+  - type: Tag
+    tags:
+    - Handcuffs
+  - type: MeleeWeapon
+    wideAnimationRotation: 90
+    resetOnHandSelected: false
+    damage:
+      types:
+        Blunt: 0
+  - type: UseDelay
+    delay: 3
+
+- type: entity
+  name: broken soulbreaker handcuffs
+  description: These handcuffs are broken.
+  id: SoulbreakerHandcuffsBroken
+  parent: BaseHandcuffsBroken
+  components:
+  - type: Sprite
+    sprite: _Europa/Objects/Specific/Security/soulbreaker_handcuffs.rsi
+    state: broken

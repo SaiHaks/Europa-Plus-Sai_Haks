@@ -1,15 +1,13 @@
 - type: entity
-  parent: [EncryptionKey, BaseMinorContraband]
-  id: EncryptionKeyInteQ
-  name: InteQ encryption key
-  description: An encryption key used by InteQ.
+  parent: [EncryptionKey, BaseMajorContraband]
+  id: EncryptionKeySoulbreaker
+  name: soulbreaker encryption key
+  description: An encryption key used by soulbreakers.
   components:
     - type: EncryptionKey
       channels:
-      - InteQ
-      defaultChannel: InteQ
+      - Soulbreakers
+      defaultChannel: Soulbreakers
     - type: Sprite
-      sprite: _Europa/Objects/Devices/encryption_keys.rsi
-      layers:
-      - state: crypt_brown
-      - state: inteq_label
+      sprite: _Europa/Objects/Devices/soulbreaker_encryption_key.rsi
+      state: icon

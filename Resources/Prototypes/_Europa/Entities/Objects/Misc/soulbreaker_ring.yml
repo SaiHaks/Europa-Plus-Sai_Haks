@@ -1,0 +1,33 @@
+- type: entity
+  parent: IDCardStandard
+  id: SoulbreakerRingIDCard
+  name: soulbreaker ring
+  description: Beautiful and multifunctional soulbreaker's ring.
+  components:
+  - type: Sprite
+    sprite: _Europa/Objects/Devices/soulbreaker_ring.rsi
+    state: icon
+  - type: IdCard
+    jobTitle: job-title-soulbreaker
+    updateName: false
+  - type: Access
+    tags:
+    - Soulbreaker
+  - type: Clothing
+    quickEquip: true
+    slots:
+    - neck
+    - belt
+  - type: Emag
+    emagType: All
+  - type: LimitedCharges
+  - type: AutoRecharge
+    rechargeDuration: 10
+  - type: AgentIDCard
+  - type: ActivatableUI
+    key: enum.AgentIDCardUiKey.Key
+    inHandsOnly: true
+  - type: UserInterface
+    interfaces:
+      enum.AgentIDCardUiKey.Key:
+        type: AgentIDCardBoundUserInterface

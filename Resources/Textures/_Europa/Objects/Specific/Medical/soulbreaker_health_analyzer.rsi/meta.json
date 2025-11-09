@@ -1,0 +1,24 @@
+{
+    "version": 1,
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "license": "Closed Party",
+    "copyright": "RandySandy",
+    "states": [
+        {
+            "name": "analyzer",
+            "delays": [
+                [
+                    0.3,
+                    0.3,
+                    0.3
+                ]
+            ]
+        },
+        {
+            "name": "icon"
+        }
+    ]
+}

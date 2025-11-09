@@ -1,0 +1,29 @@
+- type: entity
+  parent: PaintingBase
+  id: PaintingSoulbreaker1
+  name: soulbreaker painting
+  description: Some cool painting.
+  components:
+  - type: Sprite
+    sprite: _Europa/Structures/Wallmounts/Posters/soulbreaker_posters.rsi
+    state: mag1
+
+- type: entity
+  parent: PaintingBase
+  id: PaintingSoulbreaker2
+  name: soulbreaker painting
+  description: Some cool painting.
+  components:
+  - type: Sprite
+    sprite: _Europa/Structures/Wallmounts/Posters/soulbreaker_posters.rsi
+    state: mag2
+
+- type: entity
+  parent: PaintingBase
+  id: PaintingSoulbreaker3
+  name: soulbreaker painting
+  description: Some cool painting.
+  components:
+  - type: Sprite
+    sprite: _Europa/Structures/Wallmounts/Posters/soulbreaker_posters.rsi
+    state: mag3

@@ -1,0 +1,28 @@
+- type: entity
+  id: SoulbreakerCross
+  parent: BaseStructure
+  name: soulbreaker cross
+  description: InshaAllah!
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: _Europa/Structures/Specific/soulbreaker_cross.rsi
+    state: ecross
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StructuralMetallicStrong
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 350
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Strap
+    position: Stand
+    buckleOffset: "0,0.05"
+  - type: BlockHandsOnBuckle

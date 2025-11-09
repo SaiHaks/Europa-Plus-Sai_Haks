@@ -1,0 +1,14 @@
+- type: entity
+  parent: [ClothingHeadset, BaseMajorContraband]
+  id: ClothingHeadsetSoulbreaker
+  name: soulbreaker headset
+  description: Headset used by soulbreakers.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - EncryptionKeySoulbreaker
+  - type: Sprite
+    sprite: _Europa/Clothing/Ears/soulbreaker_headset.rsi
+  - type: Clothing
+    sprite: _Europa/Clothing/Ears/soulbreaker_headset.rsi
