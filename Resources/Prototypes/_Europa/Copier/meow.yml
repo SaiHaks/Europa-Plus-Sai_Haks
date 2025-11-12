@@ -12,7 +12,7 @@
 
 - type: documentForm
   id: PermissionforCarryingaWeaponsec
-  category: copier-category-Security  
+  category: copier-category-Security
   name: copier-document-PermissionforCarryingaWeaponsec
   document: /DocumentForms/Permission_for_Carrying_a_Weapon.TXT
 
@@ -174,7 +174,7 @@
 
 - type: documentForm
   id: ReportonDisposalserv
-  category: copier-category-Service
+  category: copier-category-Cargo
   name: copier-document-ReportonDisposalserv
   document: /DocumentForms/Report_on_Disposal.TXT
 
