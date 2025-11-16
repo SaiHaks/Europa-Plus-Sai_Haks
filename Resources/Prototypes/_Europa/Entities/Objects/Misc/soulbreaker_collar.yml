@@ -38,6 +38,8 @@
     slots:
     - neck
     equipDelay: 3
+    equipSound: SoulbreakerCollar
+    unequipSound: SoulbreakerCollarRemoved
   - type: UseDelay
     delay: 1.5
 #  - type: ClothingSpeedModifier
@@ -50,11 +52,11 @@
     component:
     - type: Pacified
     - type: SoulbreakerEnslavedRole
-    - type: SoulbreakerEnslaved
+#    - type: SoulbreakerEnslaved
 #    - type: Muted
     - type: BlockMovement
       blockInteraction: true
   - type: GuideHelp
     guides:
     - SoulbreakersGuide
-  - type: SoulbreakerCollar
+#  - type: SoulbreakerCollar
