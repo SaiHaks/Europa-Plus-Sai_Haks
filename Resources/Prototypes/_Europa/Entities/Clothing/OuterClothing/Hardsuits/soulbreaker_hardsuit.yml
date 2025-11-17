@@ -12,8 +12,8 @@
     highPressureMultiplier: 0.01
     lowPressureMultiplier: 1000
   - type: TemperatureProtection
-    heatingCoefficient: 0.05
-    coolingCoefficient: 0.05
+    heatingCoefficient: 0.01
+    coolingCoefficient: 0.01
   - type: FireProtection
     reduction: 0.2
   - type: IgniteFromGasImmunity
@@ -45,19 +45,23 @@
     - Tail
     - Other
     traumaDeductions:
-      Dismemberment: 0.05
+      Dismemberment: 0
       OrganDamage: 0
-      BoneDamage: 0.05
+      BoneDamage: 0
       VeinsDamage: 0
       NerveDamage: 0
     modifiers:
       coefficients:
-        Blunt: 0.05
-        Slash: 0.05
-        Piercing: 0.1
-        Heat: 0.15
-        Radiation: 0.25
+        Blunt: 0.2
+        Slash: 0.2
+        Piercing: 0.2
+        Heat: 0.2
+        Shock: 0.2
+        Cold: 0.2
+        Radiation: 0.15
         Caustic: 0.5
+        Cellular: 0.5
+        Holy: 0.5
   - type: ContainerContainer
     containers:
       toggleable-clothing: !type:Container {}
@@ -100,12 +104,11 @@
     clothingPrototypes:
       head: SoulbreakerHardsuitHelmet
   - type: ModifyDelayedKnockdown
-    delayDelta: 5.0
-    knockdownTimeDelta: -5.0
+    cancel: true
   - type: StaminaResistance
-    damageCoefficient: 0.05
+    damageCoefficient: 0
   - type: ExplosionResistance
-    damageCoefficient: 0.05
+    damageCoefficient: 0
   - type: ClothingGrantComponent
     component:
     - type: Uncuffable

@@ -16,8 +16,10 @@
   - type: IsRoof
   - type: Sprite
     sprite: _Europa/Structures/Walls/rust_wall.rsi
+    state: full
   - type: Icon
     sprite: _Europa/Structures/Walls/rust_wall.rsi
+    state: full
   - type: Destructible
     thresholds:
     - trigger:

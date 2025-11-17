@@ -32,7 +32,6 @@
     damage:
       types:
         Blunt: 0
-  - type: SelfUnremovableClothing
   - type: Clothing
     quickEquip: false
     slots:
@@ -50,15 +49,15 @@
   - type: InteractionOutline
   - type: Clickable
   - type: Pullable
-  - type: ClothingGrantComponent
-    component:
-    - type: Pacified
-    - type: SoulbreakerEnslavedRole
+#  - type: ClothingGrantComponent
+#    component:
+#    - type: Pacified
+#    - type: SoulbreakerEnslavedRole
 #    - type: SoulbreakerEnslaved
 #    - type: Muted
-    - type: BlockMovement
-      blockInteraction: true
+#    - type: BlockMovement
+#      blockInteraction: true
   - type: GuideHelp
     guides:
     - SoulbreakersGuide
-#  - type: SoulbreakerCollar
+  - type: SoulbreakerCollar

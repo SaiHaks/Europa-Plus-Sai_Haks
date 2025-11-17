@@ -18,6 +18,11 @@
       pryPowered: true
       force: true
       speedModifier: 6
+  - type: DamageOnInteractProtection
+    damageProtection:
+      flatReductions:
+        Heat: 15
+        Caustic: 15
   - type: MeleeWeapon
     attackRate: 2
     damage:

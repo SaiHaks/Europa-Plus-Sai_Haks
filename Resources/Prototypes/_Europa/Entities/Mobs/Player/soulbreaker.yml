@@ -62,6 +62,7 @@
 # damageable
   - type: Damageable
     damageContainer: BiologicalSoulbreaker
+    damageModifierSet: Soulbreaker
   - type: Destructible
     thresholds:
     - trigger:
@@ -81,6 +82,9 @@
       175: Critical
       250: Dead
 # stamina
+  - type: StaminaResistance
+    damageCoefficient: 0.8
+    worn: false
   - type: Stamina
     stunTime: 3
     staminaOnShove: 4
@@ -199,10 +203,27 @@
 # tags
   - type: Tag
     tags:
-    - CannotSuicide
+    - CannotSuicide # Haram
+    - DoorBumpOpener
+    - FootstepSound
+    - CanPilot
 # actions
   - type: Actions
   - type: ActionsContainer
+# SOME TYPE OF SHIT
+  - type: SoulbreakerCollarProtection
+  - type: SoulbreakerCollarAuthorized
+  - type: SoulbreakerEnslavable # For the feedback to the other players!
+# PULLER
+  - type: Puller
+    throwCooldown: 0.1
+    stageChangeCooldown: 0.1
+    grabThrowDamageModifier: 10
+    grabThrownSpeed: 10
+    softGrabSpeedModifier: 1
+    hardGrabSpeedModifier: 2
+    chokeGrabSpeedModifier: 3
+# Tele Shit
 
 - type: entity
   parent:

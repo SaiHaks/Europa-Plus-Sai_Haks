@@ -7,3 +7,24 @@
     Piercing: 0.8
     Cold: 0.8
     Shock: 1.6
+
+- type: damageModifierSet
+  id: Soulbreaker
+  coefficients:
+    Blunt: 0.8
+    Slash: 0.8
+    Piercing: 0.8
+    Heat: 0.8
+    Shock: 0.8
+    Asphyxiation: 0.5
+    Radiation: 0.5
+    Cold: 0.8
+    Bloodloss: 0.8
+    Poison: 0
+  flatReductions:
+    Shock: 5
+    Heat: 5
+    Blunt: 5
+    Slash: 5
+    Piercing: 5
+  ignoreArmorPierceFlags: All

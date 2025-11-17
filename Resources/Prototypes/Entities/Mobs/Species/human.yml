@@ -152,7 +152,7 @@
             state: jumpsuit-female
   - type: Sprinter # Goob Change: human major
     staminaDrainRate: 8
-
+  - type: SoulbreakerEnslavable
 
 - type: entity
   parent: BaseSpeciesDummy
