@@ -51,6 +51,7 @@
 # SPDX-FileCopyrightText: 2025 Smith <182301147+AgentSmithRadio@users.noreply.github.com>
 # SPDX-FileCopyrightText: 2025 gluesniffler <159397573+gluesniffler@users.noreply.github.com>
 # SPDX-FileCopyrightText: 2025 gluesniffler <linebarrelerenthusiast@gmail.com>
+# SPDX-FileCopyrightText: 2025 MemesHodachy <142843422+MemesHodachy@users.noreply.github.com.>
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
@@ -117,6 +118,13 @@
     ClothingHeadSanabi: 1 # Goobstation
     ClothingNeckCloakSanabi: 1 # Goobstation
     ClothingCostumeGingerbreadHead: 1 #goob
+    ClothingUniformGi: 2 #euro-japan
+    ClothingKimonoBlue: 2 #euro-japan
+    ClothingKimonoPink: 2 #euro-japan
+    ClothingKimonoPurple: 2 #euro-japan
+    ClothingKimonoSky: 2 #euro-japan
+    ClothingKimonoGreen: 2 #euro-japan
+    ClothingUniformKendoHakama: 1
   contrabandInventory:
     ClothingHeadHatRichard: 1
     ClothingShoesBling: 1
@@ -135,3 +143,5 @@
     ClothingNeckCloakCarp: 3 # Goobstation. europa edit
     ClothingOuterSuitCarp: 2 # europa edit
     ClothingNeckCloakCarpAlt: 3 # Goobstation. europa edit
+    ClothingOuterArmorKendoBogu: 1 #euro-japan upd
+    ClothingHeadHelmetKendoMen: 1 #euro-japan upd
