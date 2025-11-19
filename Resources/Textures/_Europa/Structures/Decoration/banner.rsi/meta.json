@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "banner_ueg, banner_ueg_alt sprited by no_mad#0260 | banner_inteq by PuroSlavKing (Github)",
+  "copyright": "banner_ueg, banner_ueg_alt sprited by no_mad#0260 | banner_inteq by PuroSlavKing (Github) | banner_spiderclan by MemesHodachy (Github)",
   "size": {
     "x": 32,
     "y": 32
@@ -15,6 +15,9 @@
     },
     {
       "name": "banner_ueg_alt"
+    },
+    {
+      "name": "banner_spiderclan"
     }
   ]
 }
