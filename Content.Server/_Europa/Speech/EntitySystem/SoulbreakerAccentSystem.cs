@@ -47,28 +47,28 @@ namespace Content.Server._Europa.Speech
 
             message = _replacement.ApplyReplacements(message, "SoulbreakerAccent");
 
-            if (_random.Prob(0.1f))
-            {
-                message = TrimAllEndPunctuation(message);
-                message += _random.Pick(SoulbreakInvocation);
-            }
-
-            if (_random.Prob(0.05f))
-            {
-                if (message.Length > 0)
-                {
-                    var firstCharLower = char.ToLower(message[0]);
-                    message = firstCharLower + message[1..];
-                    message = _random.Pick(SoulbreakGreetings) + " " + message;
-                    message = char.ToUpper(message[0]) + message[1..];
-                }
-            }
-
-            if (_random.Prob(0.05f))
-            {
-                message = TrimAllEndPunctuation(message);
-                message += _random.Pick(SufferingPhrases);
-            }
+            // if (_random.Prob(0.1f))
+            // {
+            //     message = TrimAllEndPunctuation(message);
+            //     message += _random.Pick(SoulbreakInvocation);
+            // }
+            //
+            // if (_random.Prob(0.05f))
+            // {
+            //     if (message.Length > 0)
+            //     {
+            //         var firstCharLower = char.ToLower(message[0]);
+            //         message = firstCharLower + message[1..];
+            //         message = _random.Pick(SoulbreakGreetings) + " " + message;
+            //         message = char.ToUpper(message[0]) + message[1..];
+            //     }
+            // }
+            //
+            // if (_random.Prob(0.05f))
+            // {
+            //     message = TrimAllEndPunctuation(message);
+            //     message += _random.Pick(SufferingPhrases);
+            // }
 
             args.Message = ApplyPhoneticReplacements(message);
         }

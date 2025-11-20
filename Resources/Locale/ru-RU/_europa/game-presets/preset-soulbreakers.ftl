@@ -22,5 +22,10 @@ soulbreakers-health-status-dead = [color=red]Мёртв![/color]
 soulbreakers-health-status-alive = [color=green]Жив![/color]
 soulbreakers-shuttle-call-unavailable = #4$1138!%*# SUFFER 9&%@$!F FEEL 8K!#LDS$83# BEHOLD 8!#4DH#21
 soulbreakers-soulbreakers-shuttle-unavailable = Не торопись! У тебя ещё есть время: {$timeRemaining}
-
+soulbreakers-round-end-sold-slaves-list = [bold][color=#888800]Проданные рабы:[/color][/bold]
+soulbreakers-round-end-sold-slave-entry = - [color=#999988]{ $name } продан за { $price } кредитов[/color]
+soulbreakers-round-end-total-slaves-sold = [color=#999988]Всего продано рабов: { $count }[/color]
+soulbreakers-round-end-no-slaves-sold = [color=green]Ни один раб не был продан.[/color]
+soulbreakers-round-end-no-soulbreakers = [color=green]Душеломов не обнаружено.[/color]
+soulbreakers-round-end-crew-status = [bold][color=#888800]Статус экипажа:[/color][/bold]
 objective-issuer-soulbreakers = Душеломы

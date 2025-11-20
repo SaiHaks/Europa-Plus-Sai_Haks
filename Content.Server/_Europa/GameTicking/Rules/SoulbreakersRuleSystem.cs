@@ -1,32 +1,23 @@
-using System.Linq;
-using Content.Server.Antag;
 using Content.Server.Chat.Systems;
-using Content.Server.Roles;
 using Content.Server.RoundEnd;
-using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
-using Content.Shared.GameTicking.Components;
-using Content.Shared.Humanoid;
 using Content.Shared.Mind;
-using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
-using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Content.Server._Europa.GameTicking.Rules.Components;
 using Content.Server._Europa.Roles;
-using Content.Server.Communications;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
-using Content.Server.Shuttles.Events;
 using Content.Shared._Europa.Soulbreakers;
-using Content.Shared.Zombies;
+using Content.Shared.GameTicking.Components;
+using Content.Shared.Mind.Components;
+using Robust.Shared.Audio.Systems;
 
 namespace Content.Server._Europa.GameTicking.Rules;
 
 public sealed class SoulbreakersRuleSystem : GameRuleSystem<SoulbreakersRuleComponent>
 {
-    [Dependency] private readonly AntagSelectionSystem _antag = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly ISharedPlayerManager _player = default!;
@@ -34,7 +25,6 @@ public sealed class SoulbreakersRuleSystem : GameRuleSystem<SoulbreakersRuleComp
     [Dependency] private readonly RoundEndSystem _roundEnd = default!;
     [Dependency] private readonly SharedMindSystem _mindSystem = default!;
     [Dependency] private readonly StationSystem _station = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     public override void Initialize()
@@ -42,32 +32,7 @@ public sealed class SoulbreakersRuleSystem : GameRuleSystem<SoulbreakersRuleComp
         base.Initialize();
 
         SubscribeLocalEvent<SoulbreakerSomeoneWasSold>(OnEnslavedSold);
-        SubscribeLocalEvent<SoulbreakerRoleComponent, GetBriefingEvent>(OnSoulbreakerBriefing);
-        SubscribeLocalEvent<SoulbreakerAssistantRoleComponent, GetBriefingEvent>(OnAssistantBriefing);
-        SubscribeLocalEvent<SoulbreakersRuleComponent, RuleLoadedGridsEvent>(OnRuleLoadedGrids);
-        SubscribeLocalEvent<SoulbreakerRoleComponent, EntityZombifiedEvent>(OnSoulbreakerZombified);
-        SubscribeLocalEvent<SoulbreakerAssistantRoleComponent, EntityZombifiedEvent>(OnSoulbreakerZombified);
-        SubscribeLocalEvent<CommunicationConsoleCallShuttleAttemptEvent>(OnShuttleCallAttempt);
-        SubscribeLocalEvent<ConsoleFTLAttemptEvent>(OnShuttleFTLAttempt);
     }
-
-    #region --- Briefings ---
-
-
-    // This is for the roundstart i think so it is usless
-    private void OnSoulbreakerBriefing(Entity<SoulbreakerRoleComponent> _, ref GetBriefingEvent args)
-    {
-        args.Append(Loc.GetString("soulbreakers-soulbreaker-role-greeting"));
-        _audio.PlayGlobal("/Audio/_Europa/Announcements/azan.ogg", Filter.Entities(args.Mind.Owner), false);
-    }
-
-    private void OnAssistantBriefing(Entity<SoulbreakerAssistantRoleComponent> _, ref GetBriefingEvent args)
-    {
-        args.Append(Loc.GetString("soulbreakers-soulbreaker-assistant-role-greeting"));
-        _audio.PlayGlobal("/Audio/_Europa/Announcements/azan.ogg", Filter.Entities(args.Mind.Owner), false);
-    }
-
-    #endregion
 
     #region --- Round End Summary ---
 
@@ -75,112 +40,146 @@ public sealed class SoulbreakersRuleSystem : GameRuleSystem<SoulbreakersRuleComp
     {
         base.AppendRoundEndText(uid, comp, gameRule, ref args);
 
-        var soulbreakers = GetSoulbreakerEntries(uid);
-        var enslavedFraction = GetEnslavedFraction(comp.EnslavedCount);
+        args.AddLine(Loc.GetString("soulbreakers-round-end-sum", ("sum", comp.EnslavedStonks.ToString("F2"))));
 
-        AppendEnslavedSummary(args, enslavedFraction, comp);
-        AppendSoulbreakerList(args, soulbreakers);
-        AppendCrewStatus(args);
+        AppendSoldSlaves(args, comp);
+
+        AppendAllSoulbreakers(args);
+
+        AppendOtherCrew(args);
     }
 
-    private List<string> GetSoulbreakerEntries(EntityUid uid)
+    private void AppendSoldSlaves(RoundEndTextAppendEvent args, SoulbreakersRuleComponent comp)
     {
-        var entries = new List<string>();
-        var antagIdentifiers = _antag.GetAntagIdentifiers(uid);
-
-        foreach (var (antagUid, data, name) in antagIdentifiers)
+        if (comp.SoldSlaves.Count > 0)
         {
-            if (!Exists(antagUid) || Terminating(antagUid))
-                continue;
-
-            var status = GetHealthStatus(antagUid);
-
-            string? text = null;
-
-            if (HasComp<SoulbreakerRoleComponent>(antagUid))
+            args.AddLine(Loc.GetString("soulbreakers-round-end-sold-slaves-list"));
+            foreach (var slave in comp.SoldSlaves)
             {
-                text = Loc.GetString("soulbreakers-round-end-user-was-soulbreaker",
-                    ("name", name),
-                    ("username", data.UserName));
+                args.AddLine(Loc.GetString("soulbreakers-round-end-sold-slave-entry",
+                    ("name", slave.Name),
+                    ("price", slave.Price.ToString("F2"))));
             }
-            else if (HasComp<SoulbreakerAssistantRoleComponent>(antagUid))
-            {
-                text = Loc.GetString("soulbreakers-round-end-user-was-soulbreaker-assistant",
-                    ("name", name),
-                    ("username", data.UserName));
-            }
-
-            if (text != null)
-                entries.Add($"{text} {status}");
+            args.AddLine(Loc.GetString("soulbreakers-round-end-total-slaves-sold",
+                ("count", comp.SoldSlaves.Count)));
         }
-
-        return entries;
-    }
-
-    private void AppendEnslavedSummary(RoundEndTextAppendEvent args, float fraction, SoulbreakersRuleComponent comp)
-    {
-        var text = fraction switch
+        else
         {
-            <= 0 => Loc.GetString("soulbreakers-round-end-enslaved-amount-none"),
-            <= 0.25f => Loc.GetString("soulbreakers-round-end-enslaved-amount-low", ("amount", comp.EnslavedCount)),
-            <= 0.5f => Loc.GetString("soulbreakers-round-end-enslaved-amount-medium", ("amount", comp.EnslavedCount)),
-            < 1f => Loc.GetString("soulbreakers-round-end-enslaved-amount-high", ("amount", comp.EnslavedCount)),
-            _ => Loc.GetString("soulbreakers-round-end-enslaved-amount-all")
-        };
-
-        args.AddLine(text);
-
-        if (fraction <= 0)
-            args.AddLine(Loc.GetString("soulbreakers-round-end-sum", ("sum", comp.EnslavedStonks.ToString("F2"))));
-    }
-
-    private void AppendSoulbreakerList(RoundEndTextAppendEvent args, IEnumerable<string> soulbreakers)
-    {
-        args.AddLine(Loc.GetString("soulbreakers-round-end-soulbreakers-list"));
-        foreach (var sb in soulbreakers)
-        {
-            args.AddLine(sb);
+            args.AddLine(Loc.GetString("soulbreakers-round-end-no-slaves-sold"));
         }
     }
 
-    private void AppendCrewStatus(RoundEndTextAppendEvent args)
+    private void AppendAllSoulbreakers(RoundEndTextAppendEvent args)
     {
-        var enslavedCrew = new List<string>();
-        var freeCrew = new List<string>();
+        var soulbreakers = new List<string>();
 
-        var players = AllEntityQuery<HumanoidAppearanceComponent, ActorComponent>();
-        while (players.MoveNext(out var uid, out _, out _))
+        var query = AllEntityQuery<SoulbreakerRoleComponent, MindContainerComponent>();
+        while (query.MoveNext(out var uid, out _, out _))
         {
-            if (!Exists(uid) || Terminating(uid))
+            if (!_mindSystem.TryGetMind(uid, out var mindId, out _))
                 continue;
 
-            if (HasComp<SoulbreakerRoleComponent>(uid)
-                || HasComp<SoulbreakerAssistantRoleComponent>(uid))
-                continue;
-
-            var name = MetaData(uid).EntityName;
-            var username = TryGetUsername(uid);
+            var icName = GetPlayerICName(uid);
+            var oocName = GetPlayerOOCName(mindId);
             var status = GetHealthStatus(uid);
 
+            var text = Loc.GetString("soulbreakers-round-end-user-was-soulbreaker",
+                ("name", icName),
+                ("username", oocName));
+
+            soulbreakers.Add($"{text} {status}");
+        }
+
+        var assistantQuery = AllEntityQuery<SoulbreakerAssistantRoleComponent, MindContainerComponent>();
+        while (assistantQuery.MoveNext(out var uid, out _, out _))
+        {
+            if (!_mindSystem.TryGetMind(uid, out var mindId, out _))
+                continue;
+
+            var icName = GetPlayerICName(uid);
+            var oocName = GetPlayerOOCName(mindId);
+            var status = GetHealthStatus(uid);
+
+            var text = Loc.GetString("soulbreakers-round-end-user-was-soulbreaker-assistant",
+                ("name", icName),
+                ("username", oocName));
+
+            soulbreakers.Add($"{text} {status}");
+        }
+
+        if (soulbreakers.Count > 0)
+        {
+            args.AddLine(Loc.GetString("soulbreakers-round-end-soulbreakers-list"));
+            foreach (var sb in soulbreakers)
+            {
+                args.AddLine(sb);
+            }
+        }
+        else
+        {
+            args.AddLine(Loc.GetString("soulbreakers-round-end-no-soulbreakers"));
+        }
+    }
+
+    private void AppendOtherCrew(RoundEndTextAppendEvent args)
+    {
+        var otherCrew = new List<string>();
+
+        var query = AllEntityQuery<MindContainerComponent>();
+        while (query.MoveNext(out var uid, out var mindContainer))
+        {
+            if (HasComp<SoulbreakerRoleComponent>(uid) || HasComp<SoulbreakerAssistantRoleComponent>(uid))
+                continue;
+
+            if (!_mindSystem.TryGetMind(uid, out var mindId, out _))
+                continue;
+
+            var name = Name(uid);
+            var username = GetUsername(mindId);
+            var status = GetHealthStatus(uid);
             var enslaved = HasComp<SoulbreakerEnslavedComponent>(uid);
+
             var text = Loc.GetString(
                 enslaved ? "soulbreakers-round-end-user-was-enslaved" : "soulbreakers-round-end-user-remained-free",
                 ("name", name),
                 ("username", username));
 
-            (enslaved ? enslavedCrew : freeCrew).Add($"{text} {status}");
+            otherCrew.Add($"{text} {status}");
         }
 
-        args.AddLine(Loc.GetString("soulbreakers-round-end-enslaved-result"));
-        foreach (var e in enslavedCrew)
+        if (otherCrew.Count > 0)
         {
-            args.AddLine(e);
+            args.AddLine(Loc.GetString("soulbreakers-round-end-crew-status"));
+            foreach (var crew in otherCrew)
+            {
+                args.AddLine(crew);
+            }
         }
+    }
 
-        foreach (var e in freeCrew)
-        {
-            args.AddLine(e);
-        }
+    private string GetUsername(EntityUid mindId)
+    {
+        if (_player.TryGetSessionByEntity(mindId, out var session))
+            return session.Name;
+
+        if (TryComp<MindComponent>(mindId, out var mind) && mind.CharacterName != null)
+            return mind.CharacterName;
+
+        return "Неизвестный";
+    }
+
+    private string GetPlayerOOCName(EntityUid mindId)
+    {
+        // OOC имя - это всегда имя сессии
+        return _player.TryGetSessionByEntity(mindId, out var session)
+            ? session.Name
+            : "Unknown";
+    }
+
+    private string GetPlayerICName(EntityUid uid)
+    {
+        // IC имя - это имя entity
+        return Name(uid);
     }
 
     private string GetHealthStatus(EntityUid uid)
@@ -188,77 +187,6 @@ public sealed class SoulbreakersRuleSystem : GameRuleSystem<SoulbreakersRuleComp
         return _mobState.IsAlive(uid)
             ? Loc.GetString("soulbreakers-health-status-alive")
             : Loc.GetString("soulbreakers-health-status-dead");
-    }
-
-    private string TryGetUsername(EntityUid uid)
-    {
-        if (_mindSystem.TryGetMind(uid, out _, out var mind) &&
-            _player.TryGetSessionById(mind.UserId, out var session))
-            return session.Name;
-
-        return string.Empty;
-    }
-
-    #endregion
-
-    #region --- Round End Logic ---
-
-    private void CheckRoundEnd(SoulbreakersRuleComponent comp)
-    {
-        if (!comp.RoundstartDelayEnded)
-            return;
-
-        var healthy = GetHealthyHumans();
-        var healthySoulbreakers = GetHealthySoulbreakers();
-        var enslavedFraction = GetEnslavedFraction(comp.EnslavedCount);
-
-        var shouldCallShuttle =
-            !_roundEnd.IsRoundEndRequested() &&
-            (enslavedFraction > comp.EnslavedShuttleCallPercentage ||
-             healthySoulbreakers.Count < 1 ||
-             healthy.Count <= healthySoulbreakers.Count);
-
-        if (shouldCallShuttle)
-        {
-            foreach (var station in _station.GetStations())
-            {
-                if (!Exists(station) || Terminating(station))
-                    continue;
-                _chat.DispatchStationAnnouncement(station,
-                    Loc.GetString("soulbreakers-shuttle-call", ("stationName", Name(station))));
-            }
-
-            // _audio.PlayGlobal("/Audio/_Europa/Announcements/azan.ogg", Filter.Broadcast(), true);
-            _roundEnd.RequestRoundEnd(null, false);
-        }
-
-        if (enslavedFraction >= 0.8f)
-            _roundEnd.EndRound();
-    }
-
-    #endregion
-
-    #region --- Specific ---
-
-    private void CheckRoundstartDelay(SoulbreakersRuleComponent comp, GameRuleComponent gameRule)
-    {
-        if (comp.RoundstartDelayEnded
-            || gameRule.ActivatedAt + comp.RoundstartDelay > _timing.CurTime)
-            return;
-        comp.RoundstartDelayEnded = true;
-        AnnounceSoulbreakersArrival();
-    }
-
-    private void AnnounceSoulbreakersArrival()
-    {
-        foreach (var station in _station.GetStations())
-        {
-            if (!Exists(station) || Terminating(station))
-                continue;
-
-            _chat.DispatchStationAnnouncement(station,
-                Loc.GetString("soulbreakers-start-announcement", ("stationName", Name(station))));
-        }
     }
 
     #endregion
@@ -272,213 +200,93 @@ public sealed class SoulbreakersRuleSystem : GameRuleSystem<SoulbreakersRuleComp
         {
             soulbreakersRule.EnslavedStonks += ev.Price;
             soulbreakersRule.EnslavedCount += 1;
-        }
-    }
-    private void OnShuttleFTLAttempt(ref ConsoleFTLAttemptEvent ev)
-    {
-        var query = QueryActiveRules();
-        while (query.MoveNext(out var uid, out _, out var soulbreakersRule, out var gameRule))
-        {
-            if (ev.Uid != GetShuttle(uid))
-                continue;
 
-            var timeRemaining = Timing.CurTime.Subtract(gameRule.ActivatedAt + soulbreakersRule.RoundstartDelay);
-            if (timeRemaining <= TimeSpan.Zero)
-                continue;
-
-            ev.Cancelled = true;
-            ev.Reason = Loc.GetString("soulbreakers-soulbreakers-shuttle-unavailable",
-                ("timeRemaining", timeRemaining.ToString("mm\\:ss")));
-            _audio.PlayGlobal("/Audio/_Goobstation/Weapons/Effects/energy_error.ogg", Filter.Entities(ev.Uid), true);
-        }
-    }
-    private void OnShuttleCallAttempt(ref CommunicationConsoleCallShuttleAttemptEvent ev)
-    {
-        var healthy = GetHealthyHumans();
-        var healthySoulbreakers = GetHealthySoulbreakers();
-        var query1 = QueryActiveRules();
-        var enslavedCount = 0;
-        while (query1.MoveNext(out var _, out var ruleComponent, out var _))
-        {
-            enslavedCount = enslavedCount < ruleComponent.EnslavedCount ? ruleComponent.EnslavedCount : enslavedCount;
-        }
-        var enslavedFraction = GetEnslavedFraction(enslavedCount);
-
-        var shouldRecallShuttle =
-            (healthySoulbreakers.Count < 1 ||
-             healthy.Count <= healthySoulbreakers.Count);
-
-        var query = QueryActiveRules();
-        while (query.MoveNext(out _, out _, out var soulbreakersRule, out _))
-        {
-            if (!soulbreakersRule.RoundstartDelayEnded)
-                continue;
-
-            if (!shouldRecallShuttle || enslavedFraction < soulbreakersRule.EnslavedShuttleCallPercentage)
-                continue;
-
-            ev.Cancelled = true;
-            ev.Reason = Loc.GetString("soulbreakers-shuttle-call-unavailable");
-            // TODO: What the fuck? My mind stop working at this point... Fix that shit, pls... 4:18
-            var sender = new List<EntityUid>();
-            if (ev.Sender != null)
-                sender.Add(ev.Sender.Value);
-            _audio.PlayGlobal("/Audio/_Europa/Announcements/trubi.ogg", Filter.Entities(sender.First()), true);
-        }
-    }
-    private void OnRuleLoadedGrids(Entity<SoulbreakersRuleComponent> ent, ref RuleLoadedGridsEvent args)
-    {
-        var query = AllEntityQuery<SoulbreakerShuttleComponent>();
-        while (query.MoveNext(out var uid, out var shuttle))
-        {
-            if (!Exists(uid) || Terminating(uid))
-                continue;
-
-            if (Transform(uid).MapID == args.Map)
+            // Сохраняем информацию о проданном рабе
+            soulbreakersRule.SoldSlaves.Add(new SoldSlaveInfo
             {
-                shuttle.AssociatedRule = ent;
-            }
+                Name = Name(ev.Slave),
+                Price = ev.Price
+            });
+
+            // Для отладки
+            Logger.Info($"Slave sold: {Name(ev.Slave)} for {ev.Price:F2}. Total: {soulbreakersRule.EnslavedStonks:F2}");
         }
     }
 
-    private void OnSoulbreakerZombified(EntityUid uid, SoulbreakerRoleComponent component, ref EntityZombifiedEvent args)
-    {
-        RemCompDeferred(uid, component);
-    }
-    private void OnSoulbreakerZombified(EntityUid uid, SoulbreakerAssistantRoleComponent component, ref EntityZombifiedEvent args)
-    {
-        RemCompDeferred(uid, component);
-    }
     protected override void Started(EntityUid uid, SoulbreakersRuleComponent comp, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
         base.Started(uid, comp, gameRule, args);
-        comp.NextLogicTick = _timing.CurTime + comp.EndCheckDelay;
+
+        // Инициализируем список проданных рабов
+        comp.SoldSlaves = new List<SoldSlaveInfo>();
+
+        // Установим нормальное время проверки
+        comp.NextLogicTick = _timing.CurTime + TimeSpan.FromMinutes(5);
     }
+
     protected override void ActiveTick(EntityUid uid, SoulbreakersRuleComponent comp, GameRuleComponent gameRule, float frameTime)
     {
         base.ActiveTick(uid, comp, gameRule, frameTime);
+
         if (comp.NextLogicTick is not { } nextCheck || nextCheck > _timing.CurTime)
             return;
 
-        CheckRoundstartDelay(comp, gameRule);
         CheckRoundEnd(comp);
         comp.NextLogicTick = _timing.CurTime + comp.EndCheckDelay;
     }
 
-    #endregion
-
-    #region --- Helpers ---
-
-    private EntityUid? GetShuttle(EntityUid ruleOwner)
+    private void CheckRoundEnd(SoulbreakersRuleComponent comp)
     {
-        var query = AllEntityQuery<SoulbreakerShuttleComponent>();
-        while (query.MoveNext(out var uid, out var comp))
+        if (!comp.RoundstartDelayEnded)
         {
-            if (comp.AssociatedRule == ruleOwner)
-                return uid;
+            if (_timing.CurTime > comp.RoundstartDelay)
+            {
+                comp.RoundstartDelayEnded = true;
+                AnnounceSoulbreakersArrival();
+            }
+            return;
         }
 
-        return null;
-    }
+        var playerCount = GetPlayerCount();
+        var enslavedFraction = playerCount == 0 ? 0 : comp.EnslavedCount / (float)playerCount;
 
-    private List<EntityUid> GetHealthyHumans(
-        bool includeOffStation = false,
-        bool includeEnslaved = false,
-        bool includeSoulbreakers = false)
-    {
-        return GetFilteredEntities(uid =>
+        if (enslavedFraction >= 0.8f && !comp.PlayedSoulbreakersWin)
         {
-            // Только живые
-            if (!_mobState.IsAlive(uid))
-                return false;
-
-            // Исключаем душеломов, если не хотим их включать
-            if (!includeSoulbreakers &&
-                (HasComp<SoulbreakerRoleComponent>(uid) || HasComp<SoulbreakerAssistantRoleComponent>(uid)))
-                return false;
-
-            // Исключаем порабощённых, если не хотим их включать
-            if (!includeEnslaved && HasComp<SoulbreakerEnslavedComponent>(uid))
-                return false;
-
-            return true;
-        },
-            includeOffStation);
-    }
-
-
-    private List<EntityUid> GetHealthySoulbreakers(bool includeOffStation = false)
-    {
-        return GetFilteredEntities(uid =>
-        {
-            // Только живые
-            if (!_mobState.IsAlive(uid))
-                return false;
-
-            // Только душеломы
-            if (!HasComp<SoulbreakerRoleComponent>(uid) && !HasComp<SoulbreakerAssistantRoleComponent>(uid))
-                return false;
-
-            // Исключаем рабов
-            if (HasComp<SoulbreakerEnslavedComponent>(uid))
-                return false;
-
-            return true;
-        },
-            includeOffStation);
-    }
-
-
-    private List<EntityUid> GetFilteredEntities(Func<EntityUid, bool> predicate, bool includeOffStation)
-    {
-        var healthy = new List<EntityUid>();
-        var stationGrids = includeOffStation ? null : GetStationGrids();
-
-        var players = AllEntityQuery<HumanoidAppearanceComponent, ActorComponent, MobStateComponent, TransformComponent>();
-        while (players.MoveNext(out var uid, out _, out _, out _, out var xform))
-        {
-            if (!Exists(uid) || Terminating(uid))
-                continue;
-
-            if (!predicate(uid))
-                continue;
-
-            if (!includeOffStation && stationGrids != null && !stationGrids.Contains(xform.GridUid ?? EntityUid.Invalid))
-                continue;
-
-            healthy.Add(uid);
+            _audio.PlayGlobal("/Audio/_Europa/Jukebox/RendySandy/soulbreaker_win.ogg", Filter.Broadcast(), true); // Why the fuck rEndy??
+            _roundEnd.EndRound();
+            comp.PlayedSoulbreakersWin = true;
         }
-
-        return healthy;
+        else if (enslavedFraction >= 0.5f && !_roundEnd.IsRoundEndRequested() && !comp.PlayedIslamicTrance)
+        {
+            _audio.PlayGlobal("/Audio/_Europa/Jukebox/RendySandy/08_Islamic_Trance.ogg", Filter.Broadcast(), true);
+            _roundEnd.RequestRoundEnd(null, false);
+            comp.PlayedIslamicTrance = true;
+        }
     }
 
-    private HashSet<EntityUid> GetStationGrids()
+    private int GetPlayerCount()
     {
-        var grids = new HashSet<EntityUid>();
-        foreach (var station in _gameTicker.GetSpawnableStations())
+        var count = 0;
+        var query = AllEntityQuery<MindContainerComponent>();
+        while (query.MoveNext(out var uid, out _))
+        {
+            if (HasComp<SoulbreakerRoleComponent>(uid) || HasComp<SoulbreakerAssistantRoleComponent>(uid))
+                continue;
+            count++;
+        }
+        return count;
+    }
+
+    private void AnnounceSoulbreakersArrival()
+    {
+        foreach (var station in _station.GetStations())
         {
             if (!Exists(station) || Terminating(station))
                 continue;
 
-            if (TryComp<StationDataComponent>(station, out _) && _station.GetLargestGrid(station) is { } grid)
-                grids.Add(grid);
+            _chat.DispatchStationAnnouncement(station,
+                Loc.GetString("soulbreakers-start-announcement", ("stationName", Name(station))));
         }
-        return grids;
-    }
-
-    private float GetEnslavedFraction(int enslavedCount)
-    {
-        var playerCount = 0;
-
-        var players = AllEntityQuery<HumanoidAppearanceComponent, ActorComponent>();
-        while (players.MoveNext(out var uid, out _, out _))
-        {
-            if (HasComp<SoulbreakerRoleComponent>(uid) || HasComp<SoulbreakerAssistantRoleComponent>(uid))
-                continue;
-            playerCount++;
-        }
-
-        return playerCount == 0 ? 0 : enslavedCount / (float)playerCount;
     }
 
     #endregion

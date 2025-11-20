@@ -1,4 +1,5 @@
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
+using Robust.Shared.Serialization;
 
 namespace Content.Server._Europa.GameTicking.Rules.Components;
 
@@ -15,14 +16,27 @@ public sealed partial class SoulbreakersRuleComponent : Component
     public bool RoundstartDelayEnded = false;
 
     [DataField]
-    public TimeSpan RoundstartDelay = TimeSpan.FromSeconds(30);
-
-    [DataField]
-    public float EnslavedShuttleCallPercentage = 0.5f;
+    public TimeSpan RoundstartDelay = TimeSpan.FromMinutes(10);
 
     [DataField]
     public int EnslavedCount = 0;
 
     [DataField]
     public float EnslavedStonks = 0;
+
+    [DataField]
+    public List<SoldSlaveInfo> SoldSlaves = new();
+
+    [ViewVariables]
+    public bool PlayedIslamicTrance = false;
+
+    [ViewVariables]
+    public bool PlayedSoulbreakersWin = false;
+}
+
+[Serializable, NetSerializable]
+public sealed class SoldSlaveInfo
+{
+    public string Name = string.Empty;
+    public float Price;
 }
