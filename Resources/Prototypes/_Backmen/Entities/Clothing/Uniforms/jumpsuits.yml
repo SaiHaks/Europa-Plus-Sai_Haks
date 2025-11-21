@@ -2,7 +2,7 @@
   parent: [ClothingUniformBase, BaseBlueShieldContraband]
   id: BackmenClothingUniformJumpsuitBlueShield
   name: officer "Blueshield"'s jumpsuit
-  description: A jumpsuit specifically for a Blueshield officers.
+  description: A jumpsuit specifically for a Blueshield officer.
   components:
   - type: Sprite
     sprite: _Backmen/Clothing/Uniforms/jumpsuit/bluesuit.rsi
